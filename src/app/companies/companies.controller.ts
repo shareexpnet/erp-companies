@@ -9,17 +9,22 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  Query,
+  DefaultValuePipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company.dto';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { MessagesHelper } from 'src/helpers/messages/message.helper';
 import { CreateCompanySwagger } from './swagger/create-company.swagger';
 import { BadRequestSwagger } from 'src/helpers/swagger/bad-request.swagger';
 import { FindCompanySwagger } from './swagger/find-company.swagger';
 import { NotFoundSwagger } from 'src/helpers/swagger/not-found.swagger';
 import { UpdateCompanySwagger } from './swagger/update-company.swagger';
+import { Pagination } from 'nestjs-typeorm-paginate';
+import { Company } from './interfaces/company.interface';
 
 @Controller('companies')
 export class CompaniesController {
@@ -53,8 +58,18 @@ export class CompaniesController {
     type: FindCompanySwagger,
     isArray: true,
   })
-  async findAll() {
-    return await this.companiesService.findAll();
+  @ApiQuery({ name: 'page' })
+  @ApiQuery({ name: 'limit' })
+  async findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit = 10,
+  ): Promise<Pagination<Company>> {
+    limit = limit > 100 ? 100 : limit;
+    return this.companiesService.findAll({
+      page,
+      limit,
+      route: process.env.COMPANIES_URL,
+    });
   }
 
   @Get(':id')
