@@ -106,7 +106,7 @@ export class CompanyEntity {
 
   @Column({ type: 'varchar', length: 50, default: '' })
   @ApiProperty()
-  image: string;
+  picture: string;
 
   @Column({ name: 'is_active', type: 'tinyint', default: 1 })
   @ApiProperty()
@@ -146,7 +146,7 @@ export class CompanyEntity {
     this.home = company?.home;
     this.observation = company?.observation;
     this.token = company?.token;
-    this.image = company?.image;
+    this.picture = company?.picture;
     this.isActive = company?.isActive;
     this.createdAt = company?.createdAt;
     this.updatedAt = company?.updatedAt;

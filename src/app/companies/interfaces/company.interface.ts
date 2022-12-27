@@ -20,7 +20,7 @@ export interface Company {
   home: string;
   observation: string;
   token: string;
-  image: string;
+  picture: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

@@ -85,7 +85,7 @@ export class CreateCompanyDto {
 
   @IsOptional()
   @ApiPropertyOptional()
-  image?: string;
+  picture?: string;
 
   @IsOptional()
   @ApiPropertyOptional()
